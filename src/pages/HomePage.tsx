@@ -4,6 +4,7 @@ import { usePlayerStore } from "@/stores/usePlayerStore"
 import { InboxIcon, PlusIcon, SettingsIcon } from "lucide-react"
 import { useEffect, useState } from "react"
 import { getOnlineCount } from "@/services/player.services"
+import { supabase } from "@/lib/supabaseClient"
 
 export default function HomePage() {
   const [onlineCount, setOnlineCount] = useState<number | null>()
@@ -11,21 +12,28 @@ export default function HomePage() {
   const { player, clearPlayer } = usePlayerStore()
 
   useEffect(() => {
-    let isMounted = true
-    
     const fetchOnlinePlayers = async () => {
       try {
         const count = await getOnlineCount()
-        if (isMounted) setOnlineCount(count)
+        setOnlineCount(count)
       } catch (err) {
         console.error('Error retrieving online players:', err)
       }
     }
-
+  
     fetchOnlinePlayers()
-
+  
+    const channel = supabase
+      .channel('players-online')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'players' },
+        () => fetchOnlinePlayers()
+      )
+      .subscribe()
+  
     return () => {
-      isMounted = false
+      supabase.removeChannel(channel)
     }
   }, [])
 
