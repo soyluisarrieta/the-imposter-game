@@ -1,17 +1,20 @@
 import { Button } from "@/components/ui/button"
-import { useUserStore } from "@/stores/useUserStore"
+import { usePlayerStore } from "@/stores/usePlayerStore"
 
-export default function UserForm() {
-  const { setUsername } = useUserStore()
+export default function PlayerForm() {
+  const { setPlayer } = usePlayerStore()
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     const formData = new FormData(e.currentTarget)
-    const username = formData.get("username")?.toString().trim()
-    if (!username) return
+    const playerName = formData.get("player-name")?.toString().trim()
+    if (!playerName) return
 
-    setUsername(username)
+    setPlayer({
+      id: 0,
+      name: playerName
+    })
   }
   
   return (
@@ -24,7 +27,7 @@ export default function UserForm() {
       <div className="grow flex items-center justify-center">
         <input
           className="w-full border-b text-4xl placeholder:text-foreground/50 focus:outline-none text-center font-bold"
-          name="username"
+          name="player-name"
           placeholder="Tu nombre"
           autoFocus
           required

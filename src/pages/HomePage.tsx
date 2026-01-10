@@ -1,20 +1,20 @@
 import { Button } from "@/components/ui/button"
-import UserForm from "@/components/UserForm"
-import { useUserStore } from "@/stores/useUserStore"
+import PlayerForm from "@/components/PlayerForm"
+import { usePlayerStore } from "@/stores/usePlayerStore"
 import { InboxIcon, PlusIcon, SettingsIcon } from "lucide-react"
 
 export default function HomePage() {
-  const { username, setUsername } = useUserStore()
+  const { player, clearPlayer } = usePlayerStore()
 
-  if (!username) return <UserForm />
+  if (!player) return <PlayerForm />
 
   return (
     <>
       <header className="p-4 flex justify-between">
         <p className="text-3xl">
-          Hola {username}
+          Hola {player.name}
         </p>
-        <Button variant='ghost' size='icon-lg' onClick={() => setUsername('')}>
+        <Button variant='ghost' size='icon-lg' onClick={() => clearPlayer()}>
           <SettingsIcon className="size-6" />
         </Button>
       </header>
