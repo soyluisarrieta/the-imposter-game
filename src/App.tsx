@@ -1,9 +1,12 @@
-import { Button } from "@/components/ui/button"
+import HomePage from "@/pages/HomePage.tsx"
+import { Route, Routes } from "react-router"
 
 export default function App() {
   return (
     <div className="min-h-dvh bg-background text-foreground">
-      <Button>Click me</Button>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+      </Routes>
     </div>
   )
 }
