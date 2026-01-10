@@ -1,43 +1,20 @@
 import { Button } from "@/components/ui/button"
 import PlayerForm from "@/components/PlayerForm"
 import { usePlayerStore } from "@/stores/usePlayerStore"
-import { InboxIcon, PlusIcon, SettingsIcon } from "lucide-react"
-import { useEffect, useState } from "react"
-import { getOnlineCount } from "@/services/player.services"
-import { supabase } from "@/lib/supabaseClient"
+import { InboxIcon, Loader2Icon, PlusIcon, SettingsIcon } from "lucide-react"
+import { useOnlinePlayers } from "@/hooks/useOnlinePlayers"
+import { disconnectPlayer } from "@/services/player.services"
 
 export default function HomePage() {
-  const [onlineCount, setOnlineCount] = useState<number | null>()
-
   const { player, clearPlayer } = usePlayerStore()
-
-  useEffect(() => {
-    const fetchOnlinePlayers = async () => {
-      try {
-        const count = await getOnlineCount()
-        setOnlineCount(count)
-      } catch (err) {
-        console.error('Error retrieving online players:', err)
-      }
-    }
-  
-    fetchOnlinePlayers()
-  
-    const channel = supabase
-      .channel('players-online')
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'players' },
-        () => fetchOnlinePlayers()
-      )
-      .subscribe()
-  
-    return () => {
-      supabase.removeChannel(channel)
-    }
-  }, [])
+  const onlinePlayers = useOnlinePlayers(player)
 
   if (!player) return <PlayerForm />
+
+  const handleDisconnect = async () => {
+    clearPlayer()
+    await disconnectPlayer(player.id)
+  }
 
   return (
     <>
@@ -45,7 +22,7 @@ export default function HomePage() {
         <p className="text-3xl">
           Hola {player.name}
         </p>
-        <Button variant='ghost' size='icon-lg' onClick={() => clearPlayer()}>
+        <Button variant='ghost' size='icon-lg' onClick={handleDisconnect}>
           <SettingsIcon className="size-6" />
         </Button>
       </header>
@@ -58,7 +35,7 @@ export default function HomePage() {
       </main>
 
       <div className="w-full fixed bottom-0 p-4 flex justify-between items-center">
-        <p>{onlineCount && `En linea: ${onlineCount}`}</p>
+        <p>En linea: {onlinePlayers ? onlinePlayers : <Loader2Icon className="size-4 inline-block animate-spin text-muted-foreground -ml-1 mb-1" />}</p>
         <Button variant='outline' size='sm'>
           <PlusIcon />
           Crear sala

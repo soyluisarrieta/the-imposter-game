@@ -21,3 +21,12 @@ export const createPlayer = async (playerName: Player['name']) => {
   if (error) throw error
   return data
 }
+
+export const disconnectPlayer = async (playerId: Player['id']) => {
+  const { error } = await supabase
+    .from('players')
+    .update({ is_online: false })
+    .eq('id', playerId)
+
+  if (error) throw error
+}
