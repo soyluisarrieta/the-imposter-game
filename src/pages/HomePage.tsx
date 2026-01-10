@@ -1,39 +1,37 @@
 import { Button } from "@/components/ui/button"
+import UserForm from "@/components/UserForm"
 import { useUserStore } from "@/stores/useUserStore"
+import { InboxIcon, PlusIcon, SettingsIcon } from "lucide-react"
 
 export default function HomePage() {
-  const { setUsername } = useUserStore()
+  const { username, setUsername } = useUserStore()
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-
-    const formData = new FormData(e.currentTarget)
-    const username = formData.get("username")?.toString().trim()
-    if (!username) return
-
-    setUsername(username)
-  }
+  if (!username) return <UserForm />
 
   return (
-    <form
-      className="min-h-dvh p-12 text-center flex flex-col"
-      onSubmit={handleSubmit}
-    >
-      <h1 className="text-3xl font-medium mb-2">¿Cómo te llamas?</h1>
-      <p className="text-muted-foreground text-sm">Este es el nombre que aparecerá en el juego</p>
-      <div className="grow flex items-center justify-center">
-        <input
-          className="w-full border-b text-4xl placeholder:text-foreground/50 focus:outline-none text-center font-bold"
-          name="username"
-          placeholder="Tu nombre"
-          autoFocus
-          required
-        />
-      </div>
+    <>
+      <header className="p-4 flex justify-between">
+        <p className="text-3xl">
+          Hola {username}
+        </p>
+        <Button variant='ghost' size='icon-lg' onClick={() => setUsername('')}>
+          <SettingsIcon className="size-6" />
+        </Button>
+      </header>
+      
+      <main className="p-4">
+        <div className="p-10 text-xl text-muted flex flex-col justify-center items-center">
+          <InboxIcon className="size-16" strokeWidth={0.6} />
+          <p className="max-w-60 text-center">No hay ninguna sala disponible</p>
+        </div>
+      </main>
 
-      <Button type="submit">
-        Continuar
-      </Button>
-    </form>
+      <div className="fixed bottom-0 right-0 p-4">
+        <Button>
+          <PlusIcon />
+          Crear sala
+        </Button>
+      </div>
+    </>
   )
 }
