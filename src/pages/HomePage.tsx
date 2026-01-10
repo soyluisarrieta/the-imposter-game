@@ -1,35 +1,39 @@
-import { Button } from "@/components/ui/button";
-import { useState } from "react";
-import { useNavigate } from "react-router";
+import { Button } from "@/components/ui/button"
+import { useUserStore } from "@/stores/useUserStore"
 
 export default function HomePage() {
-  const [username, setUsername] = useState("");
+  const { setUsername } = useUserStore()
 
-  const navigate = useNavigate();
-  
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    const formData = new FormData(e.currentTarget)
+    const username = formData.get("username")?.toString().trim()
+    if (!username) return
+
+    setUsername(username)
+  }
+
   return (
-    <div className="min-h-dvh p-12 text-center flex flex-col">
-      <div>
-        <h1 className="text-3xl font-medium mb-2">¿Cómo te llamas?</h1>
-        <p className="text-muted-foreground text-sm">Este es el nombre que aparecerá en el juego</p>
-      </div>
+    <form
+      className="min-h-dvh p-12 text-center flex flex-col"
+      onSubmit={handleSubmit}
+    >
+      <h1 className="text-3xl font-medium mb-2">¿Cómo te llamas?</h1>
+      <p className="text-muted-foreground text-sm">Este es el nombre que aparecerá en el juego</p>
       <div className="grow flex items-center justify-center">
-        <input 
+        <input
           className="w-full border-b text-4xl placeholder:text-foreground/50 focus:outline-none text-center font-bold"
           name="username"
           placeholder="Tu nombre"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
           autoFocus
+          required
         />
       </div>
-      
-      <Button 
-        disabled={!username}
-        onClick={() => navigate('/game')}
-      >
+
+      <Button type="submit">
         Continuar
       </Button>
-    </div>
+    </form>
   )
 }
