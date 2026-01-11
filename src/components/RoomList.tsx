@@ -1,4 +1,4 @@
-import type { Room } from "@/types/Room"
+import type { Room } from "@/types/room.types"
 import { InboxIcon } from "lucide-react"
 import RoomCard from "./RoomCard"
 

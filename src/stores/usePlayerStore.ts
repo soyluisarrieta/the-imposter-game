@@ -1,4 +1,4 @@
-import type { Player } from "@/types/Player";
+import type { Player } from "@/types/player.types";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 

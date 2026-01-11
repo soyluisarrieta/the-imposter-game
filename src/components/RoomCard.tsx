@@ -1,4 +1,4 @@
-import type { Room } from "@/types/Room"
+import type { Room } from "@/types/room.types"
 import { Clock3Icon, Gamepad2Icon } from "lucide-react"
 import { Link } from "react-router"
 

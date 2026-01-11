@@ -1,4 +1,4 @@
-import type { Player } from "./Player";
+import type { Player } from "./player.types";
 
 export interface Room {
     id: number

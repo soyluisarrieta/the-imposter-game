@@ -1,5 +1,5 @@
 import { supabase } from "@/lib/supabaseClient";
-import type { Player } from "@/types/Player";
+import type { Player } from "@/types/player.types";
 
 export const getOnlineCount = async () => {
   const { count, error } = await supabase

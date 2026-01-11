@@ -1,5 +1,5 @@
 import { supabase } from "@/lib/supabaseClient"
-import type { Player } from "@/types/Player"
+import type { Player } from "@/types/player.types"
 import { useEffect, useState } from "react"
 
 export function useOnlinePlayers(player: Player | null) {
