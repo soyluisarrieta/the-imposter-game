@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button"
 import { usePlayerStore } from "@/stores/usePlayerStore"
-import { InboxIcon, Loader2Icon, PlusIcon, SettingsIcon } from "lucide-react"
+import { Loader2Icon, PlusIcon, SettingsIcon } from "lucide-react"
 import { useOnlinePlayers } from "@/hooks/useOnlinePlayers"
 import { disconnectPlayer } from "@/services/player.services"
 import { Navigate } from "react-router"
+import RoomList from "@/components/RoomList"
 
 export default function HomePage() {
   const { player, clearPlayer } = usePlayerStore()
@@ -30,13 +31,10 @@ export default function HomePage() {
       </header>
 
       <main className="p-4">
-        <div className="p-10 text-xl text-muted flex flex-col justify-center items-center">
-          <InboxIcon className="size-16" strokeWidth={0.6} />
-          <p className="max-w-60 text-center">No hay ninguna sala disponible</p>
-        </div>
+        <RoomList />
       </main>
 
-      <div className="w-full fixed bottom-0 p-4 flex justify-between items-center">
+      <div className="w-full max-w-xl mx-auto fixed bottom-0 left-1/2 -translate-x-1/2 p-4 flex justify-between items-center bg-linear-to-t from-background via-background/70 via-60% to-background/0">
         <p>
           En linea: {
             onlinePlayers 
