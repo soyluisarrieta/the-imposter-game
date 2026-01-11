@@ -9,7 +9,7 @@ import { useNavigate } from "react-router"
 export default function PlayerPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  
+
   const navigate = useNavigate()
   const { setPlayer } = usePlayerStore()
 
@@ -53,7 +53,14 @@ export default function PlayerPage() {
           autoFocus
           required
         />
-      <small className={cn("h-8 mt-2 text-destructive", !error && "invisible")}>{error}</small>
+        <small 
+          className={cn(
+            "h-8 mt-2 text-destructive", 
+            !error && "invisible"
+          )}
+        >
+          {error}
+        </small>
       </div>
 
       <Button type="submit" disabled={isLoading}>

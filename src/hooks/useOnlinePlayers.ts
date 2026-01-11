@@ -2,11 +2,11 @@ import { supabase } from "@/lib/supabaseClient"
 import type { Player } from "@/types/Player"
 import { useEffect, useState } from "react"
 
-export function useOnlinePlayers(player: Player | null) {  
+export function useOnlinePlayers(player: Player | null) {
   const [count, setCount] = useState(0)
 
   useEffect(() => {
-     if (!player) return
+    if (!player) return
 
     const channel = supabase.channel('online-players', {
       config: {

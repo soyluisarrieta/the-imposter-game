@@ -37,7 +37,13 @@ export default function HomePage() {
       </main>
 
       <div className="w-full fixed bottom-0 p-4 flex justify-between items-center">
-        <p>En linea: {onlinePlayers ? onlinePlayers : <Loader2Icon className="size-4 inline-block animate-spin text-muted-foreground -ml-1 mb-1" />}</p>
+        <p>
+          En linea: {
+            onlinePlayers 
+              ? onlinePlayers 
+              : <Loader2Icon className="size-4 inline-block animate-spin text-muted-foreground -ml-1 mb-1" />
+          }
+        </p>
         <Button variant='outline' size='sm'>
           <PlusIcon />
           Crear sala
