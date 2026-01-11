@@ -1,15 +1,17 @@
 import { Button } from "@/components/ui/button"
-import PlayerForm from "@/components/PlayerForm"
 import { usePlayerStore } from "@/stores/usePlayerStore"
 import { InboxIcon, Loader2Icon, PlusIcon, SettingsIcon } from "lucide-react"
 import { useOnlinePlayers } from "@/hooks/useOnlinePlayers"
 import { disconnectPlayer } from "@/services/player.services"
+import { Navigate } from "react-router"
 
 export default function HomePage() {
   const { player, clearPlayer } = usePlayerStore()
   const onlinePlayers = useOnlinePlayers(player)
 
-  if (!player) return <PlayerForm />
+  if (!player) return (
+    <Navigate to="/jugador" replace />
+  )
 
   const handleDisconnect = async () => {
     clearPlayer()

@@ -4,11 +4,13 @@ import { createPlayer } from "@/services/player.services"
 import { usePlayerStore } from "@/stores/usePlayerStore"
 import { Loader } from "lucide-react"
 import { useState } from "react"
+import { useNavigate } from "react-router"
 
-export default function PlayerForm() {
+export default function PlayerPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   
+  const navigate = useNavigate()
   const { setPlayer } = usePlayerStore()
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -23,6 +25,7 @@ export default function PlayerForm() {
       setError(null)
       const player = await createPlayer(playerName)
       setPlayer(player)
+      navigate("/", { replace: true })
     } catch (err) {
       console.error('Error creating player:', err)
       setError('Hubo un error al crear el jugador')
