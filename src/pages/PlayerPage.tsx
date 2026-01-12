@@ -1,37 +1,22 @@
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import { createPlayer } from "@/services/player.services"
-import { usePlayerStore } from "@/stores/usePlayerStore"
 import { Loader } from "lucide-react"
-import { useState } from "react"
-import { useNavigate } from "react-router"
+import { usePlayer } from "@/hooks/usePlayer"
 
 export default function PlayerPage() {
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const {
+    mutate: createPlayer,
+    isPending,
+    error,
+    reset
+  } = usePlayer()
 
-  const navigate = useNavigate()
-  const { setPlayer } = usePlayerStore()
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-
     const formData = new FormData(e.currentTarget)
-    const playerName = formData.get("player-name")?.toString().trim()
-    if (!playerName) return
-
-    try {
-      setIsLoading(true)
-      setError(null)
-      const player = await createPlayer(playerName)
-      setPlayer(player)
-      navigate("/", { replace: true })
-    } catch (err) {
-      console.error('Error creating player:', err)
-      setError('Hubo un error al crear el jugador')
-    } finally {
-      setIsLoading(false)
-    }
+    const name = formData.get('player-name')?.toString().trim()
+    if (!name) return
+    createPlayer(name)
   }
 
   return (
@@ -40,7 +25,9 @@ export default function PlayerPage() {
       onSubmit={handleSubmit}
     >
       <h1 className="text-3xl font-medium mb-2">¿Cómo te llamas?</h1>
-      <p className="text-muted-foreground text-sm">Este es el nombre que aparecerá en el juego</p>
+      <p className="text-muted-foreground text-sm">
+        Este es el nombre que aparecerá en el juego
+      </p>
       <div className="grow flex flex-col items-center justify-center">
         <input
           className={cn(
@@ -49,22 +36,18 @@ export default function PlayerPage() {
           )}
           name="player-name"
           placeholder="Tu nombre"
-          onChange={() => error && setError(null)}
+          onChange={reset}
           autoFocus
           required
         />
-        <small 
-          className={cn(
-            "h-8 mt-2 text-destructive", 
-            !error && "invisible"
-          )}
-        >
-          {error}
+
+        <small className={cn("h-8 mt-2 text-destructive", !error && "invisible")}>
+          Hubo un error al crear el jugador
         </small>
       </div>
 
-      <Button type="submit" disabled={isLoading}>
-        {!isLoading ? "Continuar" : <><Loader className="animate-spin" /> Guardando...</>}
+      <Button type="submit" disabled={isPending}>
+        {!isPending ? "Continuar" : <><Loader className="animate-spin" /> Guardando...</>}
       </Button>
     </form>
   )
