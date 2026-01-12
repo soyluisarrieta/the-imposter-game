@@ -1,6 +1,6 @@
 import type { Player } from "@/types/player.types";
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { createJSONStorage, persist } from "zustand/middleware";
 
 interface PlayerStore {
   player: Player | null
@@ -16,5 +16,8 @@ export const usePlayerStore = create<PlayerStore>()(
       setPlayer: (player) => set({ player }),
       clearPlayer: () => set({ player: null })
     }
-  ), { name: 'player-storage' })
+  ), { 
+    name: 'player-storage' , 
+    storage: createJSONStorage(() => sessionStorage) 
+  })
 )
