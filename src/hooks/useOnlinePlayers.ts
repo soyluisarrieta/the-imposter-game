@@ -1,12 +1,15 @@
-import { supabase } from "@/lib/supabaseClient"
-import type { Player } from "@/types/player.types"
-import { useEffect, useState } from "react"
+import { useEffect, useState } from 'react'
+import { supabase } from '@/lib/supabaseClient'
+import type { Player } from '@/types/player.types'
 
 export function useOnlinePlayers(player: Player | null) {
   const [count, setCount] = useState(0)
 
   useEffect(() => {
-    if (!player) return
+    if (!player) {
+      setCount(0)
+      return
+    }
 
     const channel = supabase.channel('online-players', {
       config: {
@@ -14,7 +17,7 @@ export function useOnlinePlayers(player: Player | null) {
       }
     })
 
-    channel.on('presence', { event: 'sync' }, () => {
+    const updateCount = () => {
       const state = channel.presenceState()
       const onlineCount = Object
         .keys(state)
@@ -22,7 +25,9 @@ export function useOnlinePlayers(player: Player | null) {
         .length
 
       setCount(onlineCount + 1) // +1 to include self
-    })
+    }
+
+    channel.on('presence', { event: 'sync' }, updateCount)
 
     channel.subscribe(status => {
       if (status === 'SUBSCRIBED') {
@@ -33,7 +38,7 @@ export function useOnlinePlayers(player: Player | null) {
     return () => {
       supabase.removeChannel(channel)
     }
-  }, [player?.id])
+  }, [player])
 
   return count
 }
