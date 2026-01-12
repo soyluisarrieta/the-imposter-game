@@ -1,6 +1,7 @@
 import HomePage from "@/pages/HomePage.tsx"
 import { Route, Routes } from "react-router"
 import PlayerPage from "./pages/PlayerPage"
+import RoomPage from "./pages/RoomPage"
 
 export default function App() {
   return (
@@ -8,6 +9,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/jugador" element={<PlayerPage />} />
+        <Route path="/sala/:roomId" element={<RoomPage />} />
       </Routes>
     </div>
   )
