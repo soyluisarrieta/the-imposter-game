@@ -1,48 +1,38 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect } from 'react'
 import { getRooms } from '@/services/room.services'
 import { supabase } from '@/lib/supabaseClient'
-import type { Room } from '@/types/room.types'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+
+const ROOMS_QUERY_KEY = ['rooms']
 
 export const useRooms = () => {
-  const [rooms, setRooms] = useState<Room[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+  const queryClient = useQueryClient()
 
-  const loadRooms = useCallback(async () => {
-    try {
-      const data = await getRooms()
-      setRooms(data)
-    } catch (err) {
-      console.error('Error fetching rooms:', err)
-    }
-  }, [])
+  const query = useQuery({
+    queryKey: ROOMS_QUERY_KEY,
+    queryFn: getRooms,
+    staleTime: 0
+  })
 
   useEffect(() => {
-    const init = async () => {
-      setIsLoading(true)
-      await loadRooms()
-      setIsLoading(false)
-    }
-
-    init()
-
     const channel = supabase
       .channel('rooms-realtime')
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'rooms' },
-        loadRooms
+        () => queryClient.invalidateQueries({ queryKey: ROOMS_QUERY_KEY })
       )
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'room_players' },
-        loadRooms
+        () => queryClient.invalidateQueries({ queryKey: ROOMS_QUERY_KEY })
       )
       .subscribe()
 
     return () => {
       supabase.removeChannel(channel)
     }
-  }, [loadRooms])
+  }, [queryClient])
 
-  return { rooms, isLoading }
+  return query
 }

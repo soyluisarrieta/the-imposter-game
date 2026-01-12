@@ -42,12 +42,10 @@ export const getRoomById = async (roomId: number) => {
       room_players(player_id, color)
     `)
     .eq('id', roomId)
-    .single()
+    .maybeSingle()
 
-  if (error) {
-    if (error.code === 'PGRST116') return null // No rows found
-    throw error
-  }
+  if (error) throw error
+  if (!data) return null
   
   const room: Room = {
     id: data.id,

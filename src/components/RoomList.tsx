@@ -3,9 +3,9 @@ import RoomCard from "./RoomCard"
 import { useRooms } from "@/hooks/useRooms"
 
 export default function RoomList() {
-  const { rooms, isLoading } = useRooms()
+  const { data: rooms, isPending } = useRooms()
 
-  if (isLoading) {
+  if (isPending) {
     return (
       <div className="p-10 text-xl text-muted-foreground flex flex-col justify-center items-center">
         <LoaderIcon className="size-16 animate-spin" strokeWidth={0.5} />
@@ -13,7 +13,7 @@ export default function RoomList() {
     )
   }
 
-  if (!rooms.length) return (
+  if (!rooms?.length) return (
     <div className="p-10 text-xl text-muted flex flex-col justify-center items-center">
       <InboxIcon className="size-16" strokeWidth={0.6} />
       <p className="max-w-60 text-center">No hay ninguna sala disponible</p>
