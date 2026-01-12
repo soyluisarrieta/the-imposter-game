@@ -1,13 +1,22 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabaseClient'
 import type { Player } from '@/types/player.types'
 
+const ONLINE_PLAYERS_KEY = ['onlinePlayers']
+
 export function useOnlinePlayers(player: Player | null) {
-  const [count, setCount] = useState(0)
+  const queryClient = useQueryClient()
+
+  const { data = 0 } = useQuery({
+    queryKey: ONLINE_PLAYERS_KEY,
+    queryFn: () => 0,
+    enabled: false
+  })
 
   useEffect(() => {
     if (!player) {
-      setCount(0)
+      queryClient.setQueryData(ONLINE_PLAYERS_KEY, 0)
       return
     }
 
@@ -23,8 +32,11 @@ export function useOnlinePlayers(player: Player | null) {
         .keys(state)
         .filter(key => key !== player.id.toString())
         .length
-
-      setCount(onlineCount + 1) // +1 to include self
+      
+      queryClient.setQueryData(
+        ONLINE_PLAYERS_KEY,
+        onlineCount + 1 // +1 to include self
+      )
     }
 
     channel.on('presence', { event: 'sync' }, updateCount)
@@ -37,8 +49,9 @@ export function useOnlinePlayers(player: Player | null) {
 
     return () => {
       supabase.removeChannel(channel)
+      queryClient.setQueryData(ONLINE_PLAYERS_KEY, 0)
     }
-  }, [player])
+  }, [player, queryClient])
 
-  return count
+  return data
 }
