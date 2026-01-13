@@ -5,6 +5,8 @@ import { useOnlinePlayers } from "@/hooks/useOnlinePlayers"
 import { disconnectPlayer } from "@/services/player.services"
 import { Navigate } from "react-router"
 import RoomList from "@/components/RoomList"
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { RoomForm } from "@/components/RoomForm"
 
 export default function HomePage() {
   const { player, clearPlayer } = usePlayerStore()
@@ -37,15 +39,24 @@ export default function HomePage() {
       <div className="w-full max-w-xl mx-auto fixed bottom-0 left-1/2 -translate-x-1/2 p-4 flex justify-between items-center bg-linear-to-t from-background via-background/70 via-60% to-background/0">
         <p>
           En linea: {
-            onlinePlayers 
-              ? onlinePlayers 
+            onlinePlayers
+              ? onlinePlayers
               : <Loader2Icon className="size-4 inline-block animate-spin text-muted-foreground -ml-1 mb-1" />
           }
         </p>
-        <Button variant='outline' size='sm'>
-          <PlusIcon />
-          Crear sala
-        </Button>
+
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant='outline' size='sm'>
+              <PlusIcon />
+              Crear sala
+            </Button>
+          </DialogTrigger>
+          <DialogContent aria-describedby={undefined}>
+            <DialogTitle>Nombre de la sala</DialogTitle>
+            <RoomForm />
+          </DialogContent>
+        </Dialog>
       </div>
     </>
   )
