@@ -1,23 +1,23 @@
 import { useRoom } from "@/hooks/useRoom"
+import { usePlayerStore } from "@/stores/usePlayerStore"
 import { LoaderIcon } from "lucide-react"
 import { useParams } from "react-router"
 
-const parseRoomId = (roomId: string | undefined) => {
-  if (!roomId) return null
-  const parsed = Number(roomId)
-  return Number.isInteger(parsed) && parsed > 0 ? parsed : null
-}
-
 export default function RoomPage() {
-  const { roomId } = useParams()
-  const parsedRoomId = parseRoomId(roomId)
+  const { player } = usePlayerStore()
+  const params = useParams()
+  const roomId = Number(params.roomId)
 
-  const { data: room, isPending, isError } = useRoom(parsedRoomId)
+  const { 
+    data: room,
+    isPending,
+    isError
+  } = useRoom(roomId)
 
-  if (roomId && !parsedRoomId) {
+  if (!roomId) {
     return <div>Sala no disponible.</div>
   }
-
+  
   if (isPending) {
     return (
       <div className="p-10 text-xl text-muted-foreground flex flex-col justify-center items-center">
@@ -30,9 +30,19 @@ export default function RoomPage() {
     return <div>Sala no disponible.</div>
   }
 
+  console.log(room);
+
   return (
     <main>
-      room: {room.name}
+      <div>room: {room.name}</div>
+      <h1 className="flex items-center gap-1.5">
+        <span className="size-4 rounded-full" /* style={{backgroundColor: hexColor}} */ />
+        <span>{player?.name}</span>
+      </h1>
+      <div >
+        {/* Jugadores: {room.joindedPlayers.length} */}
+      </div>
+      {/* {JSON.stringify(players)} */}
     </main>
   )
 }
