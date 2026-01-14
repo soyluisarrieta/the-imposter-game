@@ -1,4 +1,5 @@
 import { useRoom } from "@/hooks/useRoom"
+import { useRoomPresence } from "@/hooks/useRoomPresence"
 import { usePlayerStore } from "@/stores/usePlayerStore"
 import { LoaderIcon } from "lucide-react"
 import { useParams } from "react-router"
@@ -13,6 +14,8 @@ export default function RoomPage() {
     isPending,
     isError
   } = useRoom(roomId)
+
+  const joindedPlayers = useRoomPresence(roomId)
 
   if (!roomId) {
     return <div>Sala no disponible.</div>
@@ -30,19 +33,26 @@ export default function RoomPage() {
     return <div>Sala no disponible.</div>
   }
 
-  console.log(room);
-
   return (
     <main>
-      <div>room: {room.name}</div>
+      <div className="text-xs text-muted-foreground">
+        SALA: {room.name}
+      </div>
       <h1 className="flex items-center gap-1.5">
-        <span className="size-4 rounded-full" /* style={{backgroundColor: hexColor}} */ />
+        <span className="size-4 rounded-full" />
         <span>{player?.name}</span>
       </h1>
-      <div >
-        {/* Jugadores: {room.joindedPlayers.length} */}
+
+      <div>
+        <h3>Jugadores de conectados</h3>
+        <ul>
+          {joindedPlayers.map(({id, name}) => (
+            <li key={id}>
+              Player {name}
+            </li>
+          ))}
+        </ul>
       </div>
-      {/* {JSON.stringify(players)} */}
     </main>
   )
 }
