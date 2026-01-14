@@ -7,7 +7,7 @@ export const rooms: Room[] = [
     isStarted: false,
     isPrivate: false,
     ownerId: 1,
-    joindedPlayers: [
+    joinedPlayers: [
       { id: 1, color: 0 },
       { id: 2, color: 1 },
     ]
@@ -18,7 +18,7 @@ export const rooms: Room[] = [
     isStarted: true,
     isPrivate: false,
     ownerId: 1,
-    joindedPlayers: [
+    joinedPlayers: [
       { id: 1, color: 0 },
       { id: 2, color: 1 },
       { id: 3, color: 2 },
@@ -30,7 +30,7 @@ export const rooms: Room[] = [
     isStarted: false,
     isPrivate: true,
     ownerId: 1,
-    joindedPlayers: [
+    joinedPlayers: [
       { id: 1, color: 0 }
     ]
   },

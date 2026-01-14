@@ -15,7 +15,7 @@ export default function RoomPage() {
     isError
   } = useRoom(roomId)
 
-  const joindedPlayers = useRoomPresence(roomId)
+  const joinedPlayers = useRoomPresence(roomId)
 
   if (!roomId) {
     return <div>Sala no disponible.</div>
@@ -46,7 +46,7 @@ export default function RoomPage() {
       <div>
         <h3>Jugadores de conectados</h3>
         <ul>
-          {joindedPlayers.map(({id, name}) => (
+          {joinedPlayers.map(({id, name}) => (
             <li key={id}>
               Player {name}
             </li>

@@ -1,6 +1,6 @@
 import type { Player } from "./player.types";
 
-type JoindedPlayer = {
+type joinedPlayer = {
     id: Player["id"],
     color: number
 }
@@ -11,5 +11,5 @@ export interface Room {
     isStarted: boolean
     isPrivate: boolean
     ownerId: Player["id"]
-    joindedPlayers: JoindedPlayer[]
+    joinedPlayers: joinedPlayer[]
 }

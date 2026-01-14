@@ -21,7 +21,7 @@ export default function RoomCard({ room }: Props) {
               }
           </span>
           <span>
-            {room.joindedPlayers.length} jugador{room.joindedPlayers.length !== 1 ? 'es' : ''}
+            {room.joinedPlayers.length} jugador{room.joinedPlayers.length !== 1 ? 'es' : ''}
           </span>
         </div>
       </div>

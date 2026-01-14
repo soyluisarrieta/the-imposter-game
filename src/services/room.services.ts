@@ -21,7 +21,7 @@ export const getRooms = async () => {
     isStarted: room.is_started,
     isPrivate: room.is_private,
     ownerId: room.owner_id,
-    joindedPlayers: room_players.map(({ player_id, color }) => ({
+    joinedPlayers: room_players.map(({ player_id, color }) => ({
       id: player_id,
       color
     }))
@@ -53,7 +53,7 @@ export const getRoomById = async (roomId: number) => {
     isStarted: data.is_started,
     isPrivate: data.is_private,
     ownerId: data.owner_id,
-    joindedPlayers: data.room_players.map(({ player_id, color }) => ({
+    joinedPlayers: data.room_players.map(({ player_id, color }) => ({
       id: player_id,
       color
     }))
@@ -102,7 +102,7 @@ export async function createRoom(
     isStarted: room.is_started,
     isPrivate: room.is_private,
     ownerId: room.owner_id,
-    joindedPlayers: [{
+    joinedPlayers: [{
       id: playerId,
       color: 0
     }]
